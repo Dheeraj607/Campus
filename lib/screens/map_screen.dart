@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/rendering.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
@@ -8,28 +7,29 @@ class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _launchURL();
-        },
-        child: Icon(Icons.location_on_rounded),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     _launchURL();
+      //   },
+      //   child: Icon(Icons.location_on_rounded),
+      // ),
       appBar: AppBar(
         title: Text('Campus Map'),
       ),
       body: Center(
         child: InteractiveViewer(
-          boundaryMargin: EdgeInsets.all(10.0), // Add margin for overflow
-          minScale: 0.5, // Minimum zoom level (50%)
-          maxScale: 4.0, // Maximum zoom level (400%)
+          clipBehavior: Clip.none,
+          boundaryMargin: EdgeInsets.all(10.0),
+          minScale: 0.5,
+          maxScale: 4.0,
           child: LayoutBuilder(
             builder: (context, constraints) {
               return Container(
-                height: constraints.maxHeight, // Use available height
-                width: double.infinity, // Use full width
+                height: constraints.maxHeight,
+                width: double.infinity,
                 child: Image.asset(
-                  'images/map2.png', // Replace with your static map image path
-                  fit: BoxFit.cover, // Fill the container while maintaining aspect ratio
+                  'images/map4.jpg',
+                  fit: BoxFit.cover,
                 ),
               );
             },
@@ -38,15 +38,14 @@ class MapScreen extends StatelessWidget {
       ),
     );
   }
+
   void _launchURL() async {
-  final Uri uri = Uri.parse('https://www.google.com');
+  final Uri uri = Uri.parse('https://www.google.com/');
   if (await canLaunchUrl(uri)) {
-    await launchUrl(uri);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   } else {
-    print('Could not launch http://www.example.com');
+    print('Could not launch $uri');
   }
 }
 
 }
-
-

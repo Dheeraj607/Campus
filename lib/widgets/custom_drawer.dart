@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mini/screens/calender.dart';
+import 'package:mini/screens/payment.dart';
 import '../screens/map_screen.dart';
 import '../screens/events_screen.dart';
 import '../screens/notifications_screen.dart';
@@ -33,6 +34,7 @@ class CustomDrawer extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()));
             },
           ),
+          
           ListTile(
             leading: Icon(Icons.event),
             title: Text('Events'),

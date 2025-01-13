@@ -38,7 +38,7 @@ Future<String> _getBotResponse(String message) async {
     url,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer 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',
+      'Authorization': 'Bearer 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',
     },
     body: jsonEncode({
       "model": "gpt-4o-mini",
