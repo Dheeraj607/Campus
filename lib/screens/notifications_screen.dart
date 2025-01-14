@@ -64,9 +64,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               itemBuilder: (context, index) {
                 final noti = _noti[index];
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
+                  margin: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
                   decoration: BoxDecoration(
-                    color: Color(0xFF222222),
+                    color: Color.fromARGB(255, 80, 79, 79),
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(

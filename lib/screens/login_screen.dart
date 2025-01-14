@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'package:mini/constants.dart';
 
@@ -38,7 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
           final data = json.decode(response.body);
 
           // Handle successful login
-          print('Login successful: $data');
+          print(data);
+          saveData(data["admin"],data["username"]);
           Navigator.pushReplacementNamed(context, '/home');
         } else {
           final error = json.decode(response.body)['error'] ?? 'Login failed';
@@ -53,7 +56,11 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
-
+  Future<void> saveData(bool admin,String username) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('admin', admin);
+  await prefs.setString('username', username);
+}
   void _showErrorDialog(String message) {
     showDialog(
       context: context,

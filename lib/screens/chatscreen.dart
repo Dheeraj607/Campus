@@ -38,7 +38,7 @@ Future<String> _getBotResponse(String message) async {
     url,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer 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',
+      'Authorization': 'Bearer sk-svcacct-JLZQqAArHf-XttI1fCkqX6RtiuKDdR2Usf1U8-rcFBoi7vuHDELjakYKe78T3BlbkFJ4aMwZRaYyh_9Te8MLoa-noNnzaOEKqW6oT1b3PQr6O0JGiG44NpT-RRlp1AA',
     },
     body: jsonEncode({
       "model": "gpt-4o-mini",
@@ -75,7 +75,7 @@ Future<String> _getBotResponse(String message) async {
                     padding: EdgeInsets.all(10),
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     decoration: BoxDecoration(
-                      color: isUser ? Color(0xFF222222) : Color(0xFF222222),
+                      color: isUser ? const Color.fromARGB(255, 203, 203, 203) : Color.fromARGB(255, 203, 203, 203),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(isUser ? message['user']! : message['bot']!),

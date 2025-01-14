@@ -16,13 +16,7 @@ class CampusApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Campus Navigator',
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Color(0xff090c22),
-        appBarTheme: AppBarTheme(
-          color: Color(0xff090c22),
-          
-        )
-      ),
+      
       initialRoute: '/',
       routes: {
         '/': (context) => LoginScreen(),

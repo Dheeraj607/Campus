@@ -12,7 +12,8 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _l_nameController = TextEditingController();
+  final TextEditingController _f_nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -22,7 +23,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Function to send data to the backend
   Future<void> _signUp() async {
     if (_formKey.currentState!.validate()) {
-      final String name = _nameController.text;
+      final String f_name = _f_nameController.text;
+      final String l_name = _l_nameController.text;
       final String username = _usernameController.text;
       final String email = _emailController.text;
       final String password = _passwordController.text;
@@ -33,7 +35,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           '$kBaseurl/registration/'); // Replace with your API endpoint
       var request = http.MultipartRequest('POST', uri);
 
-      request.fields['full_name'] = name;
+      request.fields['first_name'] = f_name;
+      request.fields['last_name'] = l_name;
       request.fields['username'] = username;
       request.fields['email'] = email;
       request.fields['password'] = password;
@@ -50,7 +53,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Navigator.pushReplacementNamed(context, '/');
 
           // Clear the form
-          _nameController.clear();
+          _f_nameController.clear();
+          _l_nameController.clear();
           _usernameController.clear();
           _emailController.clear();
           _passwordController.clear();
@@ -104,9 +108,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: _nameController,
+                  controller: _f_nameController,
                   decoration: const InputDecoration(
-                    labelText: 'Full Name',
+                    labelText: 'First Name',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your full name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _l_nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Last Name',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.person),
                   ),
