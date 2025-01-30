@@ -27,11 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   final List<String> _imagePaths = [
-    'images/kuc1.jpeg',
-    'images/kuc2.jpeg',
-    'images/kuc3.jpeg',
-    'images/kuc4.jpeg',
-    'images/kuc5.jpeg',
+    'images/home3.jpg',
+    'images/home1.jpg',
+    'images/home2.jpg',
+    'images/home4.jpg',
+    'images/home5.jpg',
+    
     // Add more image paths
   ];
 
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Campus Navigator'),
+            Text('Campus Events'),
             Row(
               children: [
                 IconButton(

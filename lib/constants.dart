@@ -1,1 +1,1 @@
-final kBaseurl="http://192.168.210.142:8000";
+final kBaseurl="http://192.168.1.7:8000";

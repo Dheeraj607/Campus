@@ -1,49 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mini/constants.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
   bool _isLoading = false;
 
-  Future<void> _login() async {
+  Future<void> _resetPassword() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
 
       final username = _usernameController.text;
-      final password = _passwordController.text;
+      final newPassword = _newPasswordController.text;
+      final confirm_password=_confirmPasswordController.text;
 
       try {
+        print("helloooo");
         final response = await http.post(
-          Uri.parse('$kBaseurl/login/'), // Replace with your backend URL
+          Uri.parse('$kBaseurl/password-reset/'), // Replace with your backend URL
           headers: {'Content-Type': 'application/json'},
-          body: json.encode({'username': username, 'password': password}),
+          body: json.encode({'username': username, 'password': newPassword,'confirm_password':confirm_password}),
         );
 
         if (response.statusCode == 200) {
-          final data = json.decode(response.body);
-
-          // Handle successful login
-          print(data);
-          saveData(data["admin"], data["username"]);
-          Navigator.pushReplacementNamed(context, '/home');
+          // Handle successful password reset
+          Navigator.pop(context); // Go back to login screen
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Password reset successfully. Please login.')),
+          );
         } else {
-          final error = json.decode(response.body)['error'] ?? 'Login failed';
+          final error = json.decode(response.body)['error'] ?? 'Failed to reset password';
           _showErrorDialog(error);
         }
       } catch (e) {
@@ -54,12 +57,6 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     }
-  }
-
-  Future<void> saveData(bool admin, String username) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('admin', admin);
-    await prefs.setString('username', username);
   }
 
   void _showErrorDialog(String message) {
@@ -82,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text('Reset Password'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -91,14 +88,6 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Campus Events',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 20),
               TextFormField(
                 controller: _usernameController,
                 decoration: InputDecoration(
@@ -108,16 +97,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
+                    return 'Please enter your username or email';
                   }
                   return null;
                 },
               ),
               SizedBox(height: 16),
               TextFormField(
-                controller: _passwordController,
+                controller: _newPasswordController,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: 'New Password',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.lock),
                   suffixIcon: IconButton(
@@ -136,10 +125,41 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: !_isPasswordVisible,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return 'Please enter your new password';
                   }
                   if (value.length < 6) {
                     return 'Password must be at least 6 characters';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _confirmPasswordController,
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isConfirmPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: !_isConfirmPasswordVisible,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please confirm your new password';
+                  }
+                  if (value != _newPasswordController.text) {
+                    return 'Passwords do not match';
                   }
                   return null;
                 },
@@ -148,22 +168,9 @@ class _LoginScreenState extends State<LoginScreen> {
               _isLoading
                   ? CircularProgressIndicator()
                   : ElevatedButton(
-                      onPressed: _login,
-                      child: Text('Login'),
+                      onPressed: _resetPassword,
+                      child: Text('Reset Password'),
                     ),
-              SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/signup');
-                },
-                child: Text('Don’t have an account? Sign up'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/forgot-password');
-                },
-                child: Text('Forgot Password?'),
-              ),
             ],
           ),
         ),
